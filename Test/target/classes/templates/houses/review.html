@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+ <html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">    
+     <head>
+         <div th:replace="~{fragment :: meta}"></div>   
+              
+         <div th:replace="~{fragment :: styles}"></div>
+         
+         <!-- Flatpickr -->
+         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+           
+         <title>レビュー一覧</title>   
+     </head>
+     <body>
+         <div class="hirosetravel-wrapper">
+             <!-- ヘッダー -->
+             <div th:replace="~{fragment :: header}"></div>
+             
+             <main>
+                 <div class="container pt-4 pb-5 hirosetravel-container">
+                     <div class="row justify-content-center">
+                         <div class="col-xxl-9 col-xl-10 col-lg-11">
+                             <nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                 <ol class="breadcrumb mb-0">                        
+                                     <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                                     <li class="breadcrumb-item"><a th:href="@{/houses}">民宿一覧</a></li>
+                                     <li class="breadcrumb-item"><a th:href="@{/houses/__${house.getId()}__}">民宿詳細</a></li>
+                                     <li class="breadcrumb-item active" aria-current="page">レビュー一覧</li>
+                                 </ol>
+                             </nav> 
+                             
+                             <div class="container">            
+                                 <div class="row row-cols-lg-2 row-cols-2 justify-content-center mb-5 gap-3">
+                                     <div th:each="review : ${reviewPage}" class="card review">
+										 <div class="card-body">
+                                             <h3 th:text="${review.getName()}" class="card-title"></h3>
+                                             <p class="card-text mb-1">
+												 <span th:utext="${'&#9733;'.repeat(review.getScore())}" class="review-star"></span>
+												 <span th:utext="${'&#9734;'.repeat(5-review.getScore())}" class="review-star"></span>
+											 </p>
+											 <p class="card-text mb-1">
+												 <time th:text="${#dates.format(review.getCreatedAt(), 'yyyy年M月d日')}"></time>
+											 </p>
+											 <p class="card-text">
+												 <span th:text="${review.getDescription()}"></span>
+											 </p>
+                                         </div>
+                                     </div>
+                                 </div>                                                                                                                                                 
+                             </div>
+                             <!-- ページネーション -->
+                             <div th:if="${reviewPage.getTotalPages() > 1}" class="d-flex justify-content-center">
+                                 <nav aria-label="レビュー一覧">
+                                     <ul class="pagination">
+                                         <li class="page-item">
+                                             <span th:if="${reviewPage.isFirst()}" class="page-link next">前</span>
+                                             <a th:unless="${reviewPage.isFirst()}" th:href="@{/__${house.getId()}__/review(page = ${reviewPage.getNumber() - 1})}" class="page-link travel-page-link">前</a>
+                                         </li>
+                                         <li th:each="i : ${#numbers.sequence(0, reviewPage.getTotalPages() - 1)}" class="page-item">
+                                             <span th:if="${i == reviewPage.getNumber()}" class="page-link active hirosetravel-active" th:text="${i + 1}"></span>
+                                             <a th:unless="${i == reviewPage.getNumber()}" th:href="@{/__${house.getId()}__/review(page = ${i})}" class="page-link travel-page-link" th:text="${i + 1}"></a>
+                                         </li>
+                                         <li class="page-item">                        
+                                             <span th:if="${reviewPage.isLast()}" class="page-link beafore">次</span>
+                                             <a th:unless="${reviewPage.isLast()}" th:href="@{/__${house.getId()}__/review(page = ${reviewPage.getNumber() + 1})}" class="page-link travel-page-link">次</a>
+                                         </li>
+                                     </ul>
+                                 </nav> 
+                             </div>  
+                         </div>
+                     </div>
+                 </div>
+             </main>
+             
+             <!-- フッター -->
+             <div th:replace="~{fragment :: footer}"></div>
+         </div>    
+         
+         <div th:replace="~{fragment :: scripts}"></div>
+         
+   </body>
+ </html>

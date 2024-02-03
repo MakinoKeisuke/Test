@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+     <head>
+         <div th:replace="~{fragment :: meta}"></div>   
+              
+         <div th:replace="~{fragment :: styles}"></div>
+         
+         <title>民宿情報編集</title>       
+     </head>
+     <body>
+         <div class="samuraitravel-wrapper">
+             <!-- ヘッダー -->
+             <div th:replace="~{fragment :: header}"></div>
+             
+             <main>
+                 <div class="container pt-4 pb-5 samuraitravel-container">
+                     <div class="row justify-content-center">
+                         <div class="col-xl-5 col-lg-6 col-md-8">
+                             <nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                 <ol class="breadcrumb mb-0"> 
+                                     <li class="breadcrumb-item"><a th:href="@{/admin/houses}">民宿一覧</a></li>  
+                                     <li class="breadcrumb-item"><a th:href="@{/admin/houses/__${houseEditForm.getId()}__}">民宿詳細</a></li>                                                           
+                                     <li class="breadcrumb-item active" aria-current="page">レビュー投稿</li>
+                                 </ol>
+                             </nav> 
+                          <form method="post" th:action="houses/createReview" th:object="postReviewsForm">
+								 <div class="form-group mb-2">                                            
+                                     <label class="col-form-label text-md-left fw-bold">評価</label>    
+                                     <div th:if="${#fields.hasErrors('score'}" class="text-danger small mb-2" th:errors="*{score}"></div>                                        
+                                     <div class="col-md-8">                            
+                                         <select class="form-control" th:field="*{score}" cols="30" rows="5">
+											 <option value="1">&#9733;&#9734;&#9734;&#9734;&#9734;</option>
+										 	 <option value="2">&#9733;&#9733;&#9734;&#9734;&#9734;</option>
+										 	 <option value="3">&#9733;&#9733;&#9733;&#9734;&#9734;</option>
+										     <option value="4">&#9733;&#9733;&#9733;&#9733;&#9734;</option>
+										     <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733;</option>
+										 </select>
+                                     </div>                                                              
+                                 </div>
+								 
+								 <div class="form-group mb-4">                                            
+                                     <label class="comment-item">コメント</label>  
+                                     <div class="text-danger small mb-2" th:if="${#fields.hasErrors('coment')}" th:errors="*{coment}"></div>                                          
+                                     <textaria class="form-control" th:field="*{coment}" cols="30" rows="5"></textaria>                                                                   
+                                 </div>
+								 
+								 <div class="form-group">
+									 <button type="submit" class="tokou-item">投稿</button>
+								 </div>
+							 </form>
+                         </div>
+                     </div>
+                 </div>
+                           
+             </main>
+             
+             <!-- フッター -->
+             <div th:replace="~{fragment :: footer}"></div>
+         </div>    
+         
+         <div th:replace="~{fragment :: scripts}"></div>  
+         <script th:src="@{/js/preview.js}"></script>     
+     </body>
+ </html>
